@@ -69,12 +69,24 @@ Given 2 strings s1 and s2, returns a string that is the result of
 concatenating s1 and s2. 
 */
 UStr concat(UStr s1, UStr s2) {
-	int len1 = len(s1);
-	int len2 = len(s2);
-	char *joined = malloc(len1 + len2 + 1);
-	strncpy(joined,s1.contents,len1);
-	strncpy(joined + len1,s2.contents, len2);
-	joined[len1+len2] = '\0';
+	int byte_count_s1 = 0;
+	int codepoint_count_s1 = 0;
+        while(codepoint_count_s1 < len(s1)){
+                int codepoint_length = utf8_codepoint_size(s1.contents[byte_count_s1]);
+                byte_count_s1 += codepoint_length;
+                codepoint_count_s1++;
+        }
+        int byte_count_s2 = 0;
+	int codepoint_count_s2 = 0;
+        while(codepoint_count_s2 < len(s2)){
+                int codepoint_length = utf8_codepoint_size(s2.contents[byte_count_s2]);
+                byte_count_s2 += codepoint_length;
+                codepoint_count_s2++;
+        }
+	char *joined = malloc(byte_count_s1 + byte_count_s2 + 1);
+	strncpy(joined,s1.contents,byte_count_s1);
+	strncpy(joined + byte_count_s1,s2.contents, byte_count_s2);
+	joined[byte_count_s1+byte_count_s2] = '\0';
 	UStr return_ustr = new_ustr(joined);
 	free(joined);
 	return return_ustr;

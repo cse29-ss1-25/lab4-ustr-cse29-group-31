@@ -34,7 +34,21 @@ Given a list of strings and a separator string, returns a single string
 containing all the strings in list joined by the separator.
 */
 UStr join(List* list, UStr separator) {
-    // TODO: implement this
+   UStr curr = concat(list -> data[0],separator);
+   if(list -> size == 1){
+	   return curr;
+   }
+   for(int i = 1; i < list -> size-1; i++){
+	UStr old = curr;
+	UStr part = concat(list -> data[i], separator);
+	curr = concat(curr,part);
+	free_ustr(old);
+	free_ustr(part);
+   }
+   UStr old = curr;
+   curr = concat(curr,list -> data[list -> size-1]);
+   free_ustr(old);
+   return curr;
 
 }
 
